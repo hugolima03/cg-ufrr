@@ -1,5 +1,5 @@
 export function analytical(p1, p2) {
-  console.time("analytical algorithm");
+  console.log("analytical");
   const path = []; // Lista com as coordenadas dos pixels
 
   if (p1.x === p2.x) {
@@ -16,6 +16,5 @@ export function analytical(p1, p2) {
       path.push({ x, y });
     }
   }
-  console.timeEnd("analytical algorithm");
   return path;
 }

@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, MapControls } from "@react-three/drei";
+import { MapControls } from "@react-three/drei";
 
 import PixelGrid from "components/PixelGrid";
-
-import lineRasterization from "functions/lineRasterization";
 
 import * as S from "./styles";
 
@@ -13,29 +11,6 @@ type BaseTemplateProps = {
 };
 
 const BaseTemplate = ({ children }: BaseTemplateProps) => {
-  const [pixelGridLength, setPixelGridLength] = useState(0);
-  const [fixedPixelGridLength] = useState(null);
-
-  const coloredPixels = lineRasterization.bresenham(
-    { x: 0, y: 1 },
-    { x: 8, y: 4 }
-  );
-
-  function findMaxCoordinateValue() {
-    let max = 0;
-    coloredPixels.forEach(({ x, y }) => {
-      if (x > max) max = x;
-      if (y > max) max = y;
-    });
-    setPixelGridLength((max + 1) ** 2);
-    return max;
-  }
-
-  useEffect(() => {
-    findMaxCoordinateValue();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [coloredPixels]);
-
   return (
     <S.Wrapper>
       <S.Column>{children}</S.Column>
@@ -52,10 +27,7 @@ const BaseTemplate = ({ children }: BaseTemplateProps) => {
         >
           <color attach="background" args={["rgb(26, 26, 46)"]} />
           <MapControls enableRotate={false} />
-          <PixelGrid
-            pixelGridLength={fixedPixelGridLength || pixelGridLength}
-            coloredPixels={coloredPixels}
-          />
+          <PixelGrid />
         </Canvas>
       </S.Column>
     </S.Wrapper>

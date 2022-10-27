@@ -1,4 +1,5 @@
 export function dda(p1, p2) {
+  console.log("dda");
   const path = [];
 
   const dx = p2.x - p1.x;

@@ -1,4 +1,5 @@
 export function bresenham(p1, p2) {
+  console.log("bresenham");
   const path = []; // Lista com as coordenadas dos pixels
 
   const dx = p2.x - p1.x;
