@@ -9,9 +9,9 @@ export default function Home() {
   const [pixelGridLength, setPixelGridLength] = useState(0);
   const [fixedPixelGridLength] = useState(null);
 
-  const coloredPixels = lineRasterization.dda(
-    { x: 0, y: 0 },
-    { x: 2, y: 5 }
+  const coloredPixels = lineRasterization.bresenham(
+    { x: 0, y: 1 },
+    { x: 8, y: 4 }
   );
 
   function findMaxCoordinateValue() {
