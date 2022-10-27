@@ -1,4 +1,6 @@
-function drawLine(p1, p2) {
+export function dda(p1, p2) {
+  console.time("dda algorithm");
+
   const path = [];
 
   const dx = p2.x - p1.x;
@@ -10,10 +12,6 @@ function drawLine(p1, p2) {
   for (let i = 0; i <= dx; i++) {
     path.push({ x: i, y: Math.round(m * (p1.x + i) + b) });
   }
-
+  console.timeEnd("dda algorithm");
   return path;
 }
-
-console.time("dda algorithm");
-console.log(drawLine({ x: 0, y: 5 }, { x: 5, y: 2 }));
-console.timeEnd("dda algorithm");

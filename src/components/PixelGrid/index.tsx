@@ -16,9 +16,6 @@ type PixelGridProps = {
 const PixelGrid = ({ pixelGridLength, coloredPixels }: PixelGridProps) => {
   const pixelGridLengthSqrt = Math.floor(Math.sqrt(pixelGridLength));
 
-  const Xmax = 5;
-  const Ymax = 5;
-
   const ref =
     useRef<InstancedMesh<BufferGeometry, Material | Material[]>>(null);
 

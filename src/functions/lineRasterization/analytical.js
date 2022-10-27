@@ -1,4 +1,5 @@
-export function drawLine(p1, p2) {
+export function analytical(p1, p2) {
+  console.time("analytical algorithm");
   const path = []; // Lista com as coordenadas dos pixels
 
   if (p1.x === p2.x) {
@@ -15,10 +16,6 @@ export function drawLine(p1, p2) {
       path.push({ x, y });
     }
   }
-
+  console.timeEnd("analytical algorithm");
   return path;
 }
-
-console.time("analytical algorithm");
-console.log(drawLine({ x: 0, y: 0 }, { x: 0, y: 5 }));
-console.timeEnd("analytical algorithm");

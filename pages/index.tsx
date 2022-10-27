@@ -2,16 +2,31 @@ import { Canvas } from "@react-three/fiber";
 
 import PixelGrid from "components/PixelGrid";
 
+import lineRasterization from "functions/lineRasterization";
+import { useEffect, useState } from "react";
+
 export default function Home() {
-  const pixelGridLength = 36;
-  const coloredPixels = [
+  const [pixelGridLength, setPixelGridLength] = useState(0);
+
+  const coloredPixels = lineRasterization.analytical(
     { x: 0, y: 0 },
-    { x: 1, y: 0 },
-    { x: 2, y: 1 },
-    { x: 3, y: 1 },
-    { x: 4, y: 2 },
-    { x: 5, y: 2 },
-  ];
+    { x: 6, y: 5 }
+  );
+
+  function findMaxCoordinateValue() {
+    let max = 0;
+    coloredPixels.forEach(({ x, y }) => {
+      if (x > max) max = x;
+      if (y > max) max = y;
+    });
+    setPixelGridLength(max * max);
+    return max;
+  }
+
+  useEffect(() => {
+    findMaxCoordinateValue();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [coloredPixels]);
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
