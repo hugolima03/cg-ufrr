@@ -1,5 +1,5 @@
 import { usePixelGrid } from "contexts/PixelGridContext";
-import { RefObject, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef } from "react";
 
 import { Matrix4, Color } from "three";
 import { BufferGeometry, InstancedMesh, Material } from "three";

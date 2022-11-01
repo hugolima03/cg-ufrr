@@ -31,7 +31,7 @@ const LineRasterizationForm = () => {
       if (x > max) max = x;
       if (y > max) max = y;
     });
-    console.log(tempColoredPixels)
+
     setPixelGridLength((max + 1) ** 2);
     setColoredPixels(tempColoredPixels);
   }
