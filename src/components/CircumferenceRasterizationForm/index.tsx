@@ -1,4 +1,4 @@
-import { Pixels, usePixelGrid } from "contexts/PixelGridContext";
+import { Pixel, usePixelGrid } from "contexts/PixelGridContext";
 import React, { useEffect } from "react";
 
 import { useForm } from "react-hook-form";
@@ -15,12 +15,14 @@ type Inputs = {
 };
 
 const CircumferenceRasterizationForm = () => {
-  const { register, watch, handleSubmit } = useForm<Inputs>();
+  const { register, watch, handleSubmit } = useForm<Inputs>({
+    defaultValues: { algorithm: "parametricEquation" },
+  });
 
   const { setColoredPixels, setPixelGridLength } = usePixelGrid();
 
   function onSubmit({ algorithm, raio, xc, yc }: Inputs) {
-    let tempColoredPixels: Pixels[] = [];
+    let tempColoredPixels: Pixel[] = [];
 
     if (algorithm === "parametricEquation") {
       tempColoredPixels = circumferenceRasterization[algorithm](
@@ -40,6 +42,34 @@ const CircumferenceRasterizationForm = () => {
     setColoredPixels(tempColoredPixels);
   }
 
+  const forms = {
+    parametricEquation: () => (
+      <>
+        <S.Span>
+          <input
+            {...register("xc", { required: "obrigatório" })}
+            type="number"
+            name="xc"
+            placeholder="x inicial"
+          />
+          <input
+            {...register("yc", { required: "obrigatório" })}
+            type="number"
+            name="yc"
+            placeholder="y inicial"
+          />
+        </S.Span>
+
+        <input
+          {...register("raio", { required: "obrigatório" })}
+          type="number"
+          name="raio"
+          placeholder="raio"
+        />
+      </>
+    ),
+  };
+
   return (
     <S.Form onSubmit={handleSubmit(onSubmit)}>
       <select {...register("algorithm", { required: "obrigatório" })} autoFocus>
@@ -49,31 +79,7 @@ const CircumferenceRasterizationForm = () => {
         </option> */}
       </select>
 
-      {watch("algorithm") === "parametricEquation" && (
-        <>
-          <S.Span>
-            <input
-              {...register("xc", { required: "obrigatório" })}
-              type="number"
-              name="xc"
-              placeholder="xc"
-            />
-            <input
-              {...register("yc", { required: "obrigatório" })}
-              type="number"
-              name="yc"
-              placeholder="yc"
-            />
-          </S.Span>
-
-          <input
-            {...register("raio", { required: "obrigatório" })}
-            type="number"
-            name="raio"
-            placeholder="raio"
-          />
-        </>
-      )}
+      {forms[watch("algorithm")]()}
 
       <input type="submit" />
     </S.Form>
