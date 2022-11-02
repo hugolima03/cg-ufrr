@@ -24,13 +24,11 @@ const CircumferenceRasterizationForm = () => {
   function onSubmit({ algorithm, raio, xc, yc }: Inputs) {
     let tempColoredPixels: Pixel[] = [];
 
-    if (algorithm === "parametricEquation") {
-      tempColoredPixels = circumferenceRasterization[algorithm](
-        Number(xc),
-        Number(yc),
-        Number(raio)
-      );
-    }
+    tempColoredPixels = circumferenceRasterization[algorithm](
+      Number(xc),
+      Number(yc),
+      Number(raio)
+    );
 
     let max = 0;
     tempColoredPixels.forEach(({ x, y }) => {
@@ -68,6 +66,31 @@ const CircumferenceRasterizationForm = () => {
         />
       </>
     ),
+    bresenham: () => (
+      <>
+        <S.Span>
+          <input
+            {...register("xc", { required: "obrigatório" })}
+            type="number"
+            name="xc"
+            placeholder="x inicial"
+          />
+          <input
+            {...register("yc", { required: "obrigatório" })}
+            type="number"
+            name="yc"
+            placeholder="y inicial"
+          />
+        </S.Span>
+
+        <input
+          {...register("raio", { required: "obrigatório" })}
+          type="number"
+          name="raio"
+          placeholder="raio"
+        />
+      </>
+    ),
   };
 
   return (
@@ -77,6 +100,7 @@ const CircumferenceRasterizationForm = () => {
         {/* <option value="incrementalWithSymmetry">
           Incremental com Simetria
         </option> */}
+        <option value="bresenham">Bresenham</option>
       </select>
 
       {forms[watch("algorithm")]()}
