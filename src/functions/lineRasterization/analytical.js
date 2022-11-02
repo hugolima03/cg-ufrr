@@ -1,5 +1,4 @@
 export function analytical(p1, p2) {
-  console.log("analytical");
   const path = []; // Lista com as coordenadas dos pixels
 
   if (p1.x === p2.x) {

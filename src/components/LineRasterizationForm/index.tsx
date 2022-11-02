@@ -39,7 +39,6 @@ const LineRasterizationForm = () => {
   return (
     <S.Form onSubmit={handleSubmit(onSubmit)}>
       <select {...register("algorithm", { required: "obrigatório" })} autoFocus>
-        <option value="">Selecionar algoritmo de rasterização</option>
         <option value="bresenham">Bresenham</option>
         <option value="dda">DDA</option>
         <option value="analytical">Método analítico</option>

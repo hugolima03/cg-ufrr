@@ -87,6 +87,6 @@ export function bresenham(p1, p2) {
     }
     path.push({ x, y });
   }
-  console.log(path)
+
   return path;
 }

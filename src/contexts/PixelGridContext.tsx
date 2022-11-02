@@ -36,7 +36,6 @@ type Props = {
 export function PixelGridProvider({ children }: Props) {
   const [pixelGridLength, setPixelGridLength] = useState(0);
   const [coloredPixels, setColoredPixels] = useState<Pixels[]>([]);
-  const [pixelGridLengthSqrt, setPixelGridLengthSqrt] = useState();
 
   function findMaxCoordinateValue() {
     let max = 0;
