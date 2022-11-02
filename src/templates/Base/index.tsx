@@ -5,12 +5,15 @@ import { MapControls } from "@react-three/drei";
 import PixelGrid from "components/PixelGrid";
 
 import * as S from "./styles";
+import { usePixelGrid } from "contexts/PixelGridContext";
 
 type BaseTemplateProps = {
   children: React.ReactNode;
 };
 
 const BaseTemplate = ({ children }: BaseTemplateProps) => {
+  const { coloredPixels } = usePixelGrid();
+
   return (
     <S.Wrapper>
       <S.Column>{children}</S.Column>
@@ -27,7 +30,7 @@ const BaseTemplate = ({ children }: BaseTemplateProps) => {
         >
           <color attach="background" args={["rgb(26, 26, 46)"]} />
           <MapControls enableRotate={false} />
-          <PixelGrid />
+          {coloredPixels.length && <PixelGrid />}
         </Canvas>
       </S.Column>
     </S.Wrapper>

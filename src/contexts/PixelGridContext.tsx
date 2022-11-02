@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 import { createContext, useContext, useState } from "react";
 
-type Pixels = {
+export type Pixel = {
   x: number;
   y: number;
 };
@@ -10,8 +10,8 @@ type Pixels = {
 export type PixelGridContext = {
   pixelGridLength: number;
   setPixelGridLength: React.Dispatch<React.SetStateAction<number>>;
-  coloredPixels: Pixels[];
-  setColoredPixels: React.Dispatch<React.SetStateAction<Pixels[]>>;
+  coloredPixels: Pixel[];
+  setColoredPixels: React.Dispatch<React.SetStateAction<Pixel[]>>;
 };
 
 const pixelGridContextDefaultValues: PixelGridContext = {
@@ -35,7 +35,7 @@ type Props = {
 
 export function PixelGridProvider({ children }: Props) {
   const [pixelGridLength, setPixelGridLength] = useState(0);
-  const [coloredPixels, setColoredPixels] = useState<Pixels[]>([]);
+  const [coloredPixels, setColoredPixels] = useState<Pixel[]>([]);
 
   function findMaxCoordinateValue() {
     let max = 0;
