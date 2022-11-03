@@ -21,6 +21,6 @@
     "**/*.ts",
     "**/*.tsx",
     "src/components/Pixel/index.jsx"
-, "pages/index.jsx"  ],
+, "pages/index.jsx", "src/functions/fillAlgorithms/floodFill.js"  ],
   "exclude": ["node_modules"]
 }

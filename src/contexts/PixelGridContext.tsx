@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import { createContext, useContext, useState } from "react";
+import { BufferGeometry, InstancedMesh, Material } from "three";
 
 export type Pixel = {
   x: number;
@@ -12,6 +13,9 @@ export type PixelGridContext = {
   setPixelGridLength: React.Dispatch<React.SetStateAction<number>>;
   coloredPixels: Pixel[];
   setColoredPixels: React.Dispatch<React.SetStateAction<Pixel[]>>;
+  pixelGridRef: React.RefObject<
+    InstancedMesh<BufferGeometry, Material | Material[]>
+  >;
 };
 
 const pixelGridContextDefaultValues: PixelGridContext = {
@@ -19,6 +23,7 @@ const pixelGridContextDefaultValues: PixelGridContext = {
   setPixelGridLength: () => ({}),
   coloredPixels: [],
   setColoredPixels: () => ({}),
+  pixelGridRef: { current: null },
 };
 
 export const PixelGridContext = createContext<PixelGridContext>(
@@ -36,6 +41,9 @@ type Props = {
 export function PixelGridProvider({ children }: Props) {
   const [pixelGridLength, setPixelGridLength] = useState(0);
   const [coloredPixels, setColoredPixels] = useState<Pixel[]>([]);
+
+  const pixelGridRef =
+    useRef<InstancedMesh<BufferGeometry, Material | Material[]>>(null);
 
   function findMaxCoordinateValue() {
     let max = 0;
@@ -57,6 +65,7 @@ export function PixelGridProvider({ children }: Props) {
     setColoredPixels,
     pixelGridLength,
     setPixelGridLength,
+    pixelGridRef,
   };
 
   return (
