@@ -19,7 +19,7 @@ const CircumferenceRasterizationForm = () => {
     defaultValues: { algorithm: "parametricEquation" },
   });
 
-  const { setColoredPixels, setPixelGridLength } = usePixelGrid();
+  const { setColoredPixels } = usePixelGrid();
 
   function onSubmit({ algorithm, raio, xc, yc }: Inputs) {
     let tempColoredPixels: Pixel[] = [];
@@ -36,7 +36,6 @@ const CircumferenceRasterizationForm = () => {
       if (y > max) max = y;
     });
 
-    setPixelGridLength((max + 1) ** 2);
     setColoredPixels(tempColoredPixels);
   }
 

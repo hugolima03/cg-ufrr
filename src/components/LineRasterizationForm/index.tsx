@@ -18,7 +18,7 @@ type Inputs = {
 const LineRasterizationForm = () => {
   const { register, handleSubmit } = useForm<Inputs>();
 
-  const { setColoredPixels, setPixelGridLength } = usePixelGrid();
+  const { setColoredPixels } = usePixelGrid();
 
   function onSubmit({ algorithm, x1, x2, y1, y2 }: Inputs) {
     const tempColoredPixels = lineRasterization[algorithm](
@@ -32,7 +32,6 @@ const LineRasterizationForm = () => {
       if (y > max) max = y;
     });
 
-    setPixelGridLength((max + 1) ** 2);
     setColoredPixels(tempColoredPixels);
   }
 
