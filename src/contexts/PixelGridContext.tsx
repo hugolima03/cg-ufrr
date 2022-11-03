@@ -51,7 +51,7 @@ export function PixelGridProvider({ children }: Props) {
       if (x > max) max = x;
       if (y > max) max = y;
     });
-    setPixelGridLength((max + 1) ** 2);
+    setPixelGridLength((max + 2) ** 2);
     return max;
   }
 
