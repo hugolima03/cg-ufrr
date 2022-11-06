@@ -5,8 +5,16 @@ import { floodFill, PixelWithColor } from "functions/fillAlgorithms/floodFill";
 
 import * as S from "./styles";
 
-import { square, circunference, triangle1, triangle2, retangle } from "./mocks";
+import {
+  square,
+  circunference,
+  triangle1,
+  triangle2,
+  retangle,
+  form1,
+} from "./mocks";
 import { useForm } from "react-hook-form";
+import { geometricAnalysis } from "functions/fillAlgorithms/geometricAnalysis";
 
 type Inputs = {
   geometryForm:
@@ -14,21 +22,30 @@ type Inputs = {
     | "circunference"
     | "triangle1"
     | "triangle2"
-    | "retangle";
+    | "retangle"
+    | "form1";
+  algorithm: "floodFill" | "geometricAnalysis";
+  x0: number;
+  y0: number;
 };
 
 const FillAlgorithmsForm = () => {
-  const { handleSubmit, register } = useForm<Inputs>();
+  const { handleSubmit, register, watch } = useForm<Inputs>({
+    defaultValues: {
+      algorithm: "floodFill",
+    },
+  });
 
   const { setColoredPixels } = usePixelGrid();
 
-  function onSubmit({ geometryForm }: Inputs) {
+  function onSubmit({ geometryForm, x0, y0, algorithm }: Inputs) {
     const geometryForms = {
       square,
       circunference,
       triangle1,
       triangle2,
       retangle,
+      form1,
     };
 
     let tempColoredPixels: Pixel[] = geometryForms[geometryForm];
@@ -52,15 +69,55 @@ const FillAlgorithmsForm = () => {
       }
     }
 
-    floodFill(5, 5, allPixels);
+    if (algorithm === "floodFill") {
+      floodFill(Number(x0), Number(y0), allPixels);
+    }
+
+    if (algorithm === "geometricAnalysis") {
+      geometricAnalysis(allPixels);
+    }
 
     setColoredPixels(
       allPixels.filter((p) => p.color === "red").map(({ x, y }) => ({ x, y }))
     );
   }
 
+  const forms = {
+    floodFill: () => (
+      <>
+        <span style={{ display: "flex", gap: 16 }}>
+          <input
+            {...register("x0", { required: "obrigatório" })}
+            type="number"
+            name="x0"
+            placeholder="x0"
+            defaultValue={5}
+          />
+
+          <input
+            {...register("y0", { required: "obrigatório" })}
+            type="number"
+            name="y0"
+            placeholder="y0"
+            defaultValue={5}
+          />
+        </span>
+      </>
+    ),
+    geometricAnalysis: () => <></>,
+  };
+
   return (
     <S.Form onSubmit={handleSubmit(onSubmit)}>
+      {forms[watch("algorithm")]()}
+
+      <select {...register("algorithm", { required: "obrigatório" })} autoFocus>
+        <option value="floodFill">FloodFill</option>
+        <option value="geometricAnalysis">
+          Varreduta com análise geométrica
+        </option>
+      </select>
+
       <select
         {...register("geometryForm", { required: "obrigatório" })}
         autoFocus
@@ -70,6 +127,7 @@ const FillAlgorithmsForm = () => {
         <option value="triangle1">Triangulo 1</option>
         <option value="triangle2">Triangulo 2</option>
         <option value="retangle">Retangulo</option>
+        <option value="form1">Forma 1</option>
       </select>
 
       <input type="submit" />
