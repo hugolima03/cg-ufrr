@@ -1,12 +1,10 @@
 import { usePixelGrid } from "contexts/PixelGridContext";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect } from "react";
 
-import { BufferGeometry, InstancedMesh, Material, Matrix4, Color } from "three";
+import { Matrix4, Color } from "three";
 
 const PixelGrid = () => {
-  const { pixelGridLength, coloredPixels } = usePixelGrid();
-  const ref =
-    useRef<InstancedMesh<BufferGeometry, Material | Material[]>>(null);
+  const { pixelGridLength, coloredPixels, pixelGridRef } = usePixelGrid();
 
   function buildPixelGrid() {
     const pixelGridLengthSqrt = Math.floor(Math.sqrt(pixelGridLength));
@@ -18,13 +16,13 @@ const PixelGrid = () => {
       const transform = new Matrix4();
 
       transform.setPosition(x, y, 0);
-      ref.current?.setMatrixAt(i, transform);
-      ref.current?.setColorAt(i, new Color("white")); // Pinta de branco
+      pixelGridRef.current?.setMatrixAt(i, transform);
+      pixelGridRef.current?.setColorAt(i, new Color("white")); // Pinta de branco
 
       coloredPixels.forEach(({ x, y }) => {
         const index = x + y * totalColumns;
         if (index === i) {
-          ref.current?.setColorAt(index, new Color("red")); // Pinta de vermelho
+          pixelGridRef.current?.setColorAt(index, new Color("red")); // Pinta de vermelho
         }
       });
     }
@@ -36,7 +34,10 @@ const PixelGrid = () => {
   }, [pixelGridLength, coloredPixels]);
 
   return (
-    <instancedMesh ref={ref} args={[undefined, undefined, pixelGridLength]}>
+    <instancedMesh
+      ref={pixelGridRef}
+      args={[undefined, undefined, pixelGridLength]}
+    >
       <boxGeometry args={[0.8, 0.8]} />
       <meshBasicMaterial />
     </instancedMesh>
