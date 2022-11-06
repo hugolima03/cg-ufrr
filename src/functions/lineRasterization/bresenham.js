@@ -62,6 +62,7 @@
 // }
 
 export function bresenham(p1, p2) {
+  console.time("Método de Bresenham");
   const path = []; // Lista com as coordenadas dos pixels
 
   const dx = p2.x - p1.x;
@@ -88,5 +89,6 @@ export function bresenham(p1, p2) {
     path.push({ x, y });
   }
 
+  console.timeEnd("Método de Bresenham");
   return path;
 }
