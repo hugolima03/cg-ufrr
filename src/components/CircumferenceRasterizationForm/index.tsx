@@ -8,7 +8,7 @@ import circumferenceRasterization from "functions/circumferenceRasterization";
 import * as S from "./styles";
 
 type Inputs = {
-  algorithm: "parametricEquation";
+  algorithm: "parametricEquation" | "incrementalWithSymmetry" | "bresenham";
   xc: number;
   yc: number;
   raio: number;
@@ -90,15 +90,16 @@ const CircumferenceRasterizationForm = () => {
         />
       </>
     ),
+    incrementalWithSymmetry: () => <></>,
   };
 
   return (
     <S.Form onSubmit={handleSubmit(onSubmit)}>
       <select {...register("algorithm", { required: "obrigatório" })} autoFocus>
         <option value="parametricEquation">Equação paramétrica</option>
-        {/* <option value="incrementalWithSymmetry">
+        <option value="incrementalWithSymmetry">
           Incremental com Simetria
-        </option> */}
+        </option>
         <option value="bresenham">Bresenham</option>
       </select>
 

@@ -1,5 +1,3 @@
-import path from "path";
-
 function drawCircle(xc, yc, x, y, path) {
   path.push({ x: xc + x, y: yc + y });
   path.push({ x: xc - x, y: yc + y });
