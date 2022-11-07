@@ -1,4 +1,3 @@
-// export function incrementalWithSymmetry(xc, yc, raio) {
 function drawCircle(xc, yc, x, y, path) {
   path.push({ x: xc + x, y: yc + y });
   path.push({ x: xc - x, y: yc + y });
@@ -10,9 +9,8 @@ function drawCircle(xc, yc, x, y, path) {
   path.push({ x: xc - y, y: yc - x });
 }
 
-export function incrementalWithSymmetry() {
-  const path = [];
-  const raio = 5;
+export function incrementalWithSymmetry(xcentro, ycentro, raio) {
+  let path = [];
   const xc = 0;
   const yc = 0;
 
@@ -20,17 +18,18 @@ export function incrementalWithSymmetry() {
   let y = yc;
 
   const tetha = 1 / raio;
-  const sinTetha = Math.round(Math.sin(tetha));
-  const cosTetha = Math.round(Math.cos(tetha));
+  const sinTetha = Math.sin(tetha);
+  const cosTetha = Math.cos(tetha);
 
-  while (y <= x) {
-    path.push({ x, y });
-    // drawCircle(xc, yc, x, y, path);
+  while (x >= y) {
+    drawCircle(xc, yc, Math.round(x), Math.round(y), path);
     let xn = x;
     let yn = y;
     x = xn * cosTetha - yn * sinTetha;
     y = yn * cosTetha + xn * sinTetha;
   }
+
+  path = path.map(({ x, y }) => ({ x: x + xcentro, y: y + ycentro }));
 
   return path;
 }
