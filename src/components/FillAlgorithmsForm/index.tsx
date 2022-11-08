@@ -1,5 +1,5 @@
 import { Pixel, usePixelGrid } from "contexts/PixelGridContext";
-import React, { useEffect } from "react";
+import React from "react";
 
 import { floodFill, PixelWithColor } from "functions/fillAlgorithms/floodFill";
 
@@ -12,6 +12,7 @@ import {
   triangle2,
   retangle,
   form1,
+  form2,
 } from "./mocks";
 import { useForm } from "react-hook-form";
 import { geometricAnalysis } from "functions/fillAlgorithms/geometricAnalysis";
@@ -23,7 +24,8 @@ type Inputs = {
     | "triangle1"
     | "triangle2"
     | "retangle"
-    | "form1";
+    | "form1"
+    | "form2";
   algorithm: "floodFill" | "geometricAnalysis";
   x0: number;
   y0: number;
@@ -46,6 +48,7 @@ const FillAlgorithmsForm = () => {
       triangle2,
       retangle,
       form1,
+      form2,
     };
 
     let tempColoredPixels: Pixel[] = geometryForms[geometryForm];
@@ -128,6 +131,7 @@ const FillAlgorithmsForm = () => {
         <option value="triangle2">Triangulo 2</option>
         <option value="retangle">Retangulo</option>
         <option value="form1">Forma 1</option>
+        <option value="form2">Forma 2</option>
       </select>
 
       <input type="submit" />
