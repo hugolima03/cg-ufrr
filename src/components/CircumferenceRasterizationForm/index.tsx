@@ -90,7 +90,31 @@ const CircumferenceRasterizationForm = () => {
         />
       </>
     ),
-    incrementalWithSymmetry: () => <></>,
+    incrementalWithSymmetry: () => (
+      <>
+        <S.Span>
+          <input
+            {...register("xc", { required: "obrigatório" })}
+            type="number"
+            name="xc"
+            placeholder="x inicial"
+          />
+          <input
+            {...register("yc", { required: "obrigatório" })}
+            type="number"
+            name="yc"
+            placeholder="y inicial"
+          />
+        </S.Span>
+
+        <input
+          {...register("raio", { required: "obrigatório" })}
+          type="number"
+          name="raio"
+          placeholder="raio"
+        />
+      </>
+    ),
   };
 
   return (
