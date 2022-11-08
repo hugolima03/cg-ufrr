@@ -10,6 +10,7 @@ function drawCircle(xc, yc, x, y, path) {
 }
 
 export function incrementalWithSymmetry(xcentro, ycentro, raio) {
+  console.time("Algoritmo incremental com simetria");
   let path = [];
   const xc = 0;
   const yc = 0;
@@ -31,5 +32,6 @@ export function incrementalWithSymmetry(xcentro, ycentro, raio) {
 
   path = path.map(({ x, y }) => ({ x: x + xcentro, y: y + ycentro }));
 
+  console.timeEnd("Algoritmo incremental com simetria");
   return path;
 }
