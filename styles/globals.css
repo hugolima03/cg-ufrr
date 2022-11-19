@@ -39,6 +39,8 @@ input[type="submit"] {
   background-color: #46467a;
   padding: 0.8rem 1.6rem;
   border-radius: 0.6rem;
+  text-transform: uppercase;
+  font-weight: 700;
 
   transition: all 0.4s;
 }
@@ -51,4 +53,9 @@ a:hover,
 button:hover {
   background-color: #7171c7;
   transform: scale(1.05);
+}
+
+input[type="submit"]:focus,
+input[type="submit"]:hover {
+  background-color: #7171c7;
 }
