@@ -23,7 +23,6 @@ const LineRasterizationForm = () => {
   function onSubmit({ algorithm, x1, x2, y1, y2 }: Inputs) {
     // Clear old pixel grid
     setPixelGridLength(0);
-    setColoredPixels([]);
 
     const tempColoredPixels = lineRasterization[algorithm](
       { x: Number(x1), y: Number(y1) },

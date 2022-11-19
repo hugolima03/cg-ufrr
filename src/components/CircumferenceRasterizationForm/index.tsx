@@ -24,7 +24,6 @@ const CircumferenceRasterizationForm = () => {
   function onSubmit({ algorithm, raio, xc, yc }: Inputs) {
     // Clear old pixel grid
     setPixelGridLength(0);
-    setColoredPixels([]);
 
     let tempColoredPixels: Pixel[] = [];
 
