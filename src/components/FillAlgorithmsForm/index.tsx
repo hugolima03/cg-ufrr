@@ -38,9 +38,13 @@ const FillAlgorithmsForm = () => {
     },
   });
 
-  const { setColoredPixels } = usePixelGrid();
+  const { setColoredPixels, setPixelGridLength } = usePixelGrid();
 
   function onSubmit({ geometryForm, x0, y0, algorithm }: Inputs) {
+    // Clear old pixel grid
+    setPixelGridLength(0);
+    setColoredPixels([]);
+
     const geometryForms = {
       square,
       circunference,
