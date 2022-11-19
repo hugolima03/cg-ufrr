@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styled from "styled-components";
 
 export const Wrapper = styled.main`
@@ -28,5 +29,15 @@ export const Content = styled.div`
 
   img {
     margin: 0 auto;
+  }
+`;
+
+export const Author = styled(Link)`
+  padding: 0;
+  background-color: transparent;
+  text-transform: none;
+
+  &:hover {
+    background-color: transparent;
   }
 `;

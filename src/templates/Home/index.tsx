@@ -23,6 +23,13 @@ const HomeTemplate = () => {
           Rasterização de Circunferências
         </Link>
         <Link href="/fillAlgorithms">Algoritmos de Preenchimento</Link>
+
+        <p>
+          Projeto feito por{" "}
+          <S.Author href="https://github.com/hugolima03" target="_blank">
+            Hugo Lima Romão
+          </S.Author>
+        </p>
       </S.Content>
     </S.Wrapper>
   );
