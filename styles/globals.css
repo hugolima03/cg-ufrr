@@ -24,3 +24,31 @@ a {
     background: black;
   }
 }
+
+input[type="submit"] {
+  color: white;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+a,
+button,
+input[type="submit"] {
+  background-color: #46467a;
+  padding: 0.8rem 1.6rem;
+  border-radius: 0.6rem;
+
+  transition: all 0.4s;
+}
+
+a + a {
+  margin-top: 0.8rem;
+}
+
+a:hover,
+button:hover {
+  background-color: #7171c7;
+  transform: scale(1.05);
+}

@@ -29,21 +29,4 @@ export const Content = styled.div`
   img {
     margin: 0 auto;
   }
-
-  a {
-    background-color: #46467a;
-    padding: 0.8rem 1.6rem;
-    border-radius: 0.6rem;
-
-    transition: all 0.4s;
-  }
-
-  a + a {
-    margin-top: 0.8rem;
-  }
-
-  a:hover {
-    background-color: #7171c7;
-    transform: scale(1.05);
-  }
 `;
