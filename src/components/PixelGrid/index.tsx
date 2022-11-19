@@ -13,8 +13,8 @@ const PixelGrid = () => {
     for (let i = 0; i < pixelGridLength; ++i) {
       const x = i % pixelGridLengthSqrt;
       const y = Math.floor(i / pixelGridLengthSqrt);
+      
       const transform = new Matrix4();
-
       transform.setPosition(x, y, 0);
       pixelGridRef.current?.setMatrixAt(i, transform);
       pixelGridRef.current?.setColorAt(i, new Color("white")); // Pinta de branco
@@ -22,7 +22,7 @@ const PixelGrid = () => {
       coloredPixels.forEach(({ x, y }) => {
         const index = x + y * totalColumns;
         if (index === i) {
-          pixelGridRef.current?.setColorAt(index, new Color("red")); // Pinta de vermelho
+          pixelGridRef.current?.setColorAt(index, new Color("blue")); // Pinta de vermelho
         }
       });
     }

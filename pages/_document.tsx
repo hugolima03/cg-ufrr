@@ -38,7 +38,7 @@ export default class MyDocument extends Document {
 
   render() {
     return (
-      <Html lang="pt-BR">
+      <Html lang="pt-BR" style={{ color: "white" }}>
         <Head />
         <body>
           <Main />
