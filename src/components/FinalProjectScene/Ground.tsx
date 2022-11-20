@@ -4,8 +4,18 @@ import { BufferAttribute } from "three";
 import { useLoader } from "@react-three/fiber";
 import { MeshReflectorMaterial } from "@react-three/drei";
 import { TextureLoader } from "three/src/loaders/TextureLoader";
+import { usePlane } from "@react-three/cannon";
 
 const Ground = () => {
+  const [ref] = usePlane(
+    () => ({
+      type: "Static",
+      rotation: [-Math.PI / 2, 0, 0],
+      position: [-1.5, -0.38, 3],
+    }),
+    useRef(null)
+  );
+
   const gridMap = useLoader(TextureLoader, "/textures/grid.png");
   const aoMap = useLoader(TextureLoader, "/textures/ground-ao.png");
   const alphaMap = useLoader(TextureLoader, "/textures/alpha-map.png");
@@ -21,7 +31,10 @@ const Ground = () => {
     let uvs = meshRef?.current?.geometry.attributes.uv.array;
     meshRef.current?.geometry.setAttribute("uv2", new BufferAttribute(uvs, 2));
     let uvs2 = meshRef2?.current?.geometry.attributes.uv.array;
-    meshRef2.current?.geometry.setAttribute("uv2", new BufferAttribute(uvs2, 2));
+    meshRef2.current?.geometry.setAttribute(
+      "uv2",
+      new BufferAttribute(uvs2, 2)
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [meshRef.current]);
 

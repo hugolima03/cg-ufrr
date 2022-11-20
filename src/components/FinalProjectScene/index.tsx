@@ -11,7 +11,6 @@ import Ground from "./Ground";
 import Car from "./Car";
 
 const FinalProjectScene = () => {
-  console.log(process.env.NEXT_PUBLIC_PUBLIC_URL + "/textures/envmap.hdr");
   return (
     <Suspense fallback={null}>
       <Environment files={"/textures/envmap.hdr"} background />
