@@ -12,7 +12,7 @@ export default function App({ Component, pageProps }: AppProps) {
         color="#FFF12B"
         startPosition={0.3}
         stopDelayMs={200}
-        height={5}
+        height={3}
         showOnShallow={true}
       />
 
