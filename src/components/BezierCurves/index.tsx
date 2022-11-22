@@ -8,12 +8,20 @@ import { Column, Wrapper } from "templates/Base/styles";
 
 const PLOT_HEIGHT = 500;
 
+type Inputs = {
+  algorithm: "parametric" | "castejaul";
+  numDrawingPoints: number;
+};
+
 const BezierCurves = () => {
   let drawingPoints: Pixel[] = [];
   const [debugPoints, setDebugPoints] = useState<Pixel[]>([]);
 
   const [controlPoints, setControlPoints] = useState<Pixel[]>([
     { x: 10, y: 10 },
+    { x: 10, y: 250 },
+    { x: 210, y: 250 },
+    { x: 210, y: 10 },
   ]);
 
   const [lines, setLines] = useState<React.ReactNode[]>([]);
@@ -105,19 +113,10 @@ const BezierCurves = () => {
     return coeff;
   }
 
-  function onSubmit(data: any) {
-    setLines([]);
-    setDebugPoints([]);
-
-    drawingPoints = [];
-    calculateDrawingPoints(Number(data.numDrawingPoints));
-    drawHandles();
-    drawCurveFromPoints(drawingPoints);
-  }
-
-  const { handleSubmit, register, watch } = useForm({
+  const { handleSubmit, register, watch } = useForm<Inputs>({
     defaultValues: {
       algorithm: "parametric",
+      numDrawingPoints: 50,
     },
   });
 
@@ -131,6 +130,24 @@ const BezierCurves = () => {
         temp[index] = { ...temp[index], y: newValue };
       }
 
+      return [...temp];
+    });
+  }
+
+  function onSubmit(data: Inputs) {
+    setLines([]);
+    setDebugPoints([]);
+
+    drawingPoints = [];
+    calculateDrawingPoints(Number(data.numDrawingPoints));
+    drawHandles();
+    drawCurveFromPoints(drawingPoints);
+  }
+
+  function removeControlPoint(index: number) {
+    setControlPoints((points) => {
+      const temp = points;
+      temp.splice(index, 1);
       return [...temp];
     });
   }
@@ -154,7 +171,7 @@ const BezierCurves = () => {
                   <input
                     type="number"
                     defaultValue={x}
-                    onChange={(e) =>
+                    onBlur={(e) =>
                       onInputChange(Number(e.target.value), index, "x")
                     }
                     step={100}
@@ -162,23 +179,28 @@ const BezierCurves = () => {
                   <input
                     type="number"
                     defaultValue={y}
-                    onChange={(e) =>
+                    onBlur={(e) =>
                       onInputChange(Number(e.target.value), index, "y")
                     }
                     step={100}
                   />
+                  <button
+                    type="button"
+                    onClick={() => removeControlPoint(index)}
+                  >
+                    Remover
+                  </button>
                 </Span>
               ))}
 
-              <label>numDrawingPoints</label>
+              <label>numDrawingPoints: {watch("numDrawingPoints")}</label>
 
               <input
                 type="range"
                 min={1}
                 max={101}
-                {...register("numDrawingPoints" as any)}
-                defaultValue={50}
                 step={5}
+                {...register("numDrawingPoints")}
               />
 
               <button
@@ -196,7 +218,12 @@ const BezierCurves = () => {
         </Form>
       </Column>
       <Column style={{ backgroundColor: "white" }}>
-        <svg width="500px" height="500px" id="graph">
+        <svg
+          width="500px"
+          height="500px"
+          id="graph"
+          style={{ overflow: "visible" }}
+        >
           {lines.map((line) => line)}
           {debugPoints.map(({ x, y }) => (
             <circle key={x + y} cx={x} cy={PLOT_HEIGHT - y} r="5" fill="#000" />
