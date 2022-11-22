@@ -21,6 +21,6 @@
     "**/*.ts",
     "**/*.tsx",
     "src/components/Pixel/index.jsx"
-, "pages/index.jsx", "src/functions/fillAlgorithms/floodFill.js"  ],
+, "pages/index.jsx", "src/functions/fillAlgorithms/floodFill.js", "src/components/BezierCurves/index.jsx"  ],
   "exclude": ["node_modules"]
 }

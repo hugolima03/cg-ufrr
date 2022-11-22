@@ -23,6 +23,7 @@ const HomeTemplate = () => {
           Rasterização de Circunferências
         </Link>
         <Link href="/fillAlgorithms">Algoritmos de Preenchimento</Link>
+        <Link href="/bezierCurves">Curvas de Bezier</Link>
         <Link href="/finalProject">Projeto Final</Link>
 
         <p>
