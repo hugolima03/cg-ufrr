@@ -25,12 +25,13 @@ a {
   }
 }
 
-input[type="submit"] {
+input[type="submit"],
+button {
   color: white;
   border: none;
   outline: none;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 a,
