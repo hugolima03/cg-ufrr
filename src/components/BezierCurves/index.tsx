@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 
 import { Column, Wrapper } from "templates/Base/styles";
 
+import { deCasteljauAlgorithm } from "functions/bezierCurves/casteljau";
+
 const PLOT_HEIGHT = 500;
 
 type Inputs = {
@@ -135,13 +137,32 @@ const BezierCurves = () => {
   }
 
   function onSubmit(data: Inputs) {
-    setLines([]);
-    setDebugPoints([]);
+    if (data.algorithm === "parametric") {
+      setLines([]);
+      setDebugPoints([]);
 
-    drawingPoints = [];
-    calculateDrawingPoints(Number(data.numDrawingPoints));
-    drawHandles();
-    drawCurveFromPoints(drawingPoints);
+      drawingPoints = [];
+      calculateDrawingPoints(Number(data.numDrawingPoints));
+      drawHandles(); // Desenhar linhas dos pontos de controle
+      drawCurveFromPoints(drawingPoints);
+    }
+
+    if (data.algorithm === "castejaul") {
+      setLines([]);
+      setDebugPoints([]);
+      const points = [];
+
+      const temp = controlPoints.map(({ x, y }) => ({ x, y: PLOT_HEIGHT - y }));
+      const interval = 1 / data.numDrawingPoints;
+      let t = interval;
+      points.push(deCasteljauAlgorithm(temp, 0));
+      for (let i = 0; i < data.numDrawingPoints; i++) {
+        points.push(deCasteljauAlgorithm(temp, t));
+        t += interval;
+      }
+      drawHandles(); // Desenhar linhas dos pontos de controle
+      drawCurveFromPoints(points);
+    }
   }
 
   function removeControlPoint(index: number) {
@@ -163,56 +184,51 @@ const BezierCurves = () => {
             <option value="parametric">Equação paramétrica</option>
             <option value="casteljau">Casteljau</option>
           </select>
-          {watch("algorithm") === "parametric" && (
-            <>
-              <label>pontos</label>
-              {controlPoints.map(({ x, y }, index) => (
-                <Span key={x + y + index}>
-                  <input
-                    type="number"
-                    defaultValue={x}
-                    onBlur={(e) =>
-                      onInputChange(Number(e.target.value), index, "x")
-                    }
-                    step={100}
-                  />
-                  <input
-                    type="number"
-                    defaultValue={y}
-                    onBlur={(e) =>
-                      onInputChange(Number(e.target.value), index, "y")
-                    }
-                    step={100}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeControlPoint(index)}
-                  >
-                    Remover
-                  </button>
-                </Span>
-              ))}
+          <>
+            <label>pontos</label>
+            {controlPoints.map(({ x, y }, index) => (
+              <Span key={x + y + index}>
+                <input
+                  type="number"
+                  defaultValue={x}
+                  onBlur={(e) =>
+                    onInputChange(Number(e.target.value), index, "x")
+                  }
+                  step={100}
+                />
+                <input
+                  type="number"
+                  defaultValue={y}
+                  onBlur={(e) =>
+                    onInputChange(Number(e.target.value), index, "y")
+                  }
+                  step={100}
+                />
+                <button type="button" onClick={() => removeControlPoint(index)}>
+                  Remover
+                </button>
+              </Span>
+            ))}
 
-              <label>numDrawingPoints: {watch("numDrawingPoints")}</label>
+            <label>numDrawingPoints: {watch("numDrawingPoints")}</label>
 
-              <input
-                type="range"
-                min={1}
-                max={101}
-                step={5}
-                {...register("numDrawingPoints")}
-              />
+            <input
+              type="range"
+              min={1}
+              max={101}
+              step={5}
+              {...register("numDrawingPoints")}
+            />
 
-              <button
-                type="button"
-                onClick={() =>
-                  setControlPoints((points) => [...points, { x: 0, y: 0 }])
-                }
-              >
-                Adicionar ponto de controle
-              </button>
-            </>
-          )}
+            <button
+              type="button"
+              onClick={() =>
+                setControlPoints((points) => [...points, { x: 0, y: 0 }])
+              }
+            >
+              Adicionar ponto de controle
+            </button>
+          </>
 
           <input type="submit" onClick={handleSubmit(onSubmit)} />
         </Form>
