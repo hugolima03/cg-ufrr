@@ -155,6 +155,7 @@ const BezierCurves = () => {
       const temp = controlPoints.map(({ x, y }) => ({ x, y: PLOT_HEIGHT - y }));
       const interval = 1 / data.numDrawingPoints;
       let t = interval;
+      
       points.push(deCasteljauAlgorithm(temp, 0));
       for (let i = 0; i < data.numDrawingPoints; i++) {
         points.push(deCasteljauAlgorithm(temp, t));
