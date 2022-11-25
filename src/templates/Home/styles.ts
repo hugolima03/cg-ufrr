@@ -16,7 +16,7 @@ export const Wrapper = styled.main`
 export const ImageWrapper = styled.div`
   display: flex;
   width: 6rem;
-  height: 5rem;
+  min-height: 5rem;
   position: relative;
 `;
 

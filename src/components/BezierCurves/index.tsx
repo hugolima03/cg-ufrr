@@ -11,7 +11,7 @@ import { deCasteljauAlgorithm } from "functions/bezierCurves/casteljau";
 const PLOT_HEIGHT = 500;
 
 type Inputs = {
-  algorithm: "parametric" | "castejaul";
+  algorithm: "parametric" | "casteljau";
   numDrawingPoints: number;
 };
 
@@ -138,6 +138,7 @@ const BezierCurves = () => {
 
   function onSubmit(data: Inputs) {
     if (data.algorithm === "parametric") {
+      console.time("parametric");
       setLines([]);
       setDebugPoints([]);
 
@@ -145,9 +146,11 @@ const BezierCurves = () => {
       calculateDrawingPoints(Number(data.numDrawingPoints));
       drawHandles(); // Desenhar linhas dos pontos de controle
       drawCurveFromPoints(drawingPoints);
+      console.timeEnd("parametric");
     }
 
-    if (data.algorithm === "castejaul") {
+    if (data.algorithm === "casteljau") {
+      console.time("casteljau");
       setLines([]);
       setDebugPoints([]);
       const points = [];
@@ -155,7 +158,7 @@ const BezierCurves = () => {
       const temp = controlPoints.map(({ x, y }) => ({ x, y: PLOT_HEIGHT - y }));
       const interval = 1 / data.numDrawingPoints;
       let t = interval;
-      
+
       points.push(deCasteljauAlgorithm(temp, 0));
       for (let i = 0; i < data.numDrawingPoints; i++) {
         points.push(deCasteljauAlgorithm(temp, t));
@@ -163,6 +166,7 @@ const BezierCurves = () => {
       }
       drawHandles(); // Desenhar linhas dos pontos de controle
       drawCurveFromPoints(points);
+      console.timeEnd("casteljau");
     }
   }
 
