@@ -24,6 +24,7 @@ const HomeTemplate = () => {
         </Link>
         <Link href="/fillAlgorithms">Algoritmos de Preenchimento</Link>
         <Link href="/bezierCurves">Curvas de Bezier</Link>
+        <Link href="/polygonClipping">Recorte Sutherland-Hodgman</Link>
         <Link href="/finalProject">Projeto Final</Link>
 
         <p>
