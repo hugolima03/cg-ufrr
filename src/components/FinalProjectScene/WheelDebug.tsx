@@ -1,4 +1,4 @@
-const debug = false;
+const debug = true;
 
 type WheelDebugProps = {
   radius: number;
