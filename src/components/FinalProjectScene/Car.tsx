@@ -5,6 +5,7 @@ import { useFrame, useLoader } from "@react-three/fiber";
 import { useBox, Triplet, useRaycastVehicle } from "@react-three/cannon";
 import { useWheels } from "./useWheels";
 import { WheelDebug } from "./WheelDebug";
+import useControls from "./useControls";
 
 const Car = () => {
   let mesh = useLoader(GLTFLoader, "/models/car.glb").scene;
@@ -34,6 +35,8 @@ const Car = () => {
     }),
     useRef(null)
   );
+
+  useControls(vehicleApi, chassisApi);
 
   useEffect(() => {
     mesh.scale.set(0.0012, 0.0012, 0.0012);
