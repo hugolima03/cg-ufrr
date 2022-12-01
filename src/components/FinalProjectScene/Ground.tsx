@@ -7,11 +7,11 @@ import { TextureLoader } from "three/src/loaders/TextureLoader";
 import { usePlane } from "@react-three/cannon";
 
 const Ground = () => {
-  const [ref] = usePlane(
+  usePlane(
     () => ({
+      material: "ground",
       type: "Static",
       rotation: [-Math.PI / 2, 0, 0],
-      position: [-1.5, -0.38, 3],
     }),
     useRef(null)
   );
@@ -28,6 +28,8 @@ const Ground = () => {
   const meshRef2 = useRef<any>(null);
 
   useEffect(() => {
+    if (!meshRef.current) return;
+
     let uvs = meshRef?.current?.geometry.attributes.uv.array;
     meshRef.current?.geometry.setAttribute("uv2", new BufferAttribute(uvs, 2));
     let uvs2 = meshRef2?.current?.geometry.attributes.uv.array;
@@ -39,7 +41,7 @@ const Ground = () => {
   }, [meshRef.current]);
 
   return (
-    <>
+    <group>
       <mesh
         ref={meshRef2}
         position={[-2.285, -0.01, -1.325]}
@@ -83,7 +85,7 @@ const Ground = () => {
           reflectorOffset={0.02} // Offsets the virtual camera that projects the reflection. Useful when the reflective
         />
       </mesh>
-    </>
+    </group>
   );
 };
 

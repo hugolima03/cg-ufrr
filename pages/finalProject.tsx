@@ -7,7 +7,7 @@ import FinalProjectScene from "components/FinalProjectScene";
 const finalProject = () => {
   return (
     <Canvas style={{ height: "100vh", width: "100vw" }}>
-      <Physics broadphase="SAP" gravity={[0, -2.6, 0]}>
+      <Physics broadphase="SAP" gravity={[0, -2.6, 0]} allowSleep>
         <FinalProjectScene />
       </Physics>
     </Canvas>

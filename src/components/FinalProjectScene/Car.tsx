@@ -19,7 +19,8 @@ const Car = () => {
   const chassisBodyArgs = [width, height, front * 2];
   const [chassisBody, chassisApi] = useBox(
     () => ({
-      arguments: chassisBodyArgs,
+      allowSleep: false,
+      args: chassisBodyArgs as any,
       mass: 150,
       position,
     }),
