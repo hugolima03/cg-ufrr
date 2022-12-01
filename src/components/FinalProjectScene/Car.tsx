@@ -4,7 +4,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { useBox, Triplet, useRaycastVehicle } from "@react-three/cannon";
 import { useWheels } from "./useWheels";
-import { WheelDebug } from "./WheelDebug";
+import { Wheel } from "./Wheel";
 import useControls from "./useControls";
 import { Quaternion, Vector3 } from "three";
 import { useGLTF } from "@react-three/drei";
@@ -65,9 +65,9 @@ type BeetleGLTF = GLTF & {
 
 const Car = ({ thirdPerson }: CarProps) => {
   const position: Triplet = [-1.5, 0.5, 3];
-  const width = 0.1;
+  const width = 0.2;
   const height = 0.07;
-  const front = 0.15;
+  const front = 0.12;
   const wheelRadius = 0.05;
 
   const chassisBodyArgs: Triplet = [width, height, front * 2];
@@ -225,18 +225,10 @@ const Car = ({ thirdPerson }: CarProps) => {
         />
       </group>
 
-      {/* <group ref={chassisBody as any} name="chassisBody">
-        <primitive
-          object={mesh}
-          rotation-y={Math.PI}
-          position={[0, -0.09, 0]}
-        />
-      </group> */}
-
-      <WheelDebug wheelRef={wheels[0]} radius={wheelRadius} />
-      <WheelDebug wheelRef={wheels[1]} radius={wheelRadius} />
-      <WheelDebug wheelRef={wheels[2]} radius={wheelRadius} />
-      <WheelDebug wheelRef={wheels[3]} radius={wheelRadius} />
+      <Wheel wheelRef={wheels[0]} radius={wheelRadius} leftSide />
+      <Wheel wheelRef={wheels[1]} radius={wheelRadius} />
+      <Wheel wheelRef={wheels[2]} radius={wheelRadius} leftSide />
+      <Wheel wheelRef={wheels[3]} radius={wheelRadius} />
     </group>
   );
 };
