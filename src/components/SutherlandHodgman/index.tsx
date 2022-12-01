@@ -22,45 +22,81 @@ const SutherlandHodgman = () => {
   const canvas = useRef<HTMLCanvasElement>(null);
   const canvasHeight = 500;
 
+  function intersection([x1, y1, x2, y2, x3, y3, x4, y4]: number[]) {
+    var dc = [x1 - x2, y1 - y2],
+      dp = [y3 - y4, x3 - x4],
+      n1 = x1 * y2 - y1 * x2,
+      n2 = y3 * x4 - x3 * y4,
+      denominador = dc[0] * dp[1] - dc[1] * dp[0];
+    return [
+      (n1 * dp[0] - n2 * dc[0]) / denominador,
+      (n1 * dp[1] - n2 * dc[1]) / denominador,
+    ];
+  }
+
+  function isInside(ponto: number[], [x1, x2, y1, y2]: number[]) {
+    return (x2 - x1) * (ponto[1] - y1) > (y2 - y1) * (ponto[0] - x1);
+  }
+
   function clip(polygon: number[][], polygonWindow: number[][]) {
-    let cp1: any, cp2: any, s: any, e: any;
-
-    function inside(p: any) {
-      return (
-        (cp2[0] - cp1[0]) * (p[1] - cp1[1]) >
-        (cp2[1] - cp1[1]) * (p[0] - cp1[0])
-      );
-    }
-
-    var intersection = function () {
-      var dc = [cp1[0] - cp2[0], cp1[1] - cp2[1]],
-        dp = [s[0] - e[0], s[1] - e[1]],
-        n1 = cp1[0] * cp2[1] - cp1[1] * cp2[0],
-        n2 = s[0] * e[1] - s[1] * e[0],
-        n3 = 1.0 / (dc[0] * dp[1] - dc[1] * dp[0]);
-      // retorna interseção p/ x e y
-      return [(n1 * dp[0] - n2 * dc[0]) * n3, (n1 * dp[1] - n2 * dc[1]) * n3];
-    };
+    let windowP1: any, windowP2: any, polyP1: any, polyP2: any;
     var outputList = polygon;
-    cp1 = polygonWindow[polygonWindow.length - 1];
+
+    windowP1 = polygonWindow[polygonWindow.length - 1];
+
     for (var j in polygonWindow) {
-      cp2 = polygonWindow[j];
+      windowP2 = polygonWindow[j];
       var inputList = outputList;
       outputList = [];
-      s = inputList[inputList.length - 1]; //last on the input list
+      polyP1 = inputList[inputList.length - 1]; //last on the input list
+
       for (var i in inputList) {
-        e = inputList[i];
-        if (inside(e)) {
-          if (!inside(s)) {
-            outputList.push(intersection());
+        polyP2 = inputList[i];
+        if (
+          isInside(polyP2, [windowP1[0], windowP2[0], windowP1[1], windowP2[1]])
+        ) {
+          if (
+            !isInside(polyP1, [
+              windowP1[0],
+              windowP2[0],
+              windowP1[1],
+              windowP2[1],
+            ])
+          ) {
+            outputList.push(
+              intersection([
+                windowP1[0],
+                windowP1[1],
+                windowP2[0],
+                windowP2[1],
+                polyP1[1],
+                polyP1[0],
+                polyP2[1],
+                polyP2[0],
+              ])
+            ); // Caso 4, salva p1' e p2
           }
-          outputList.push(e);
-        } else if (inside(s)) {
-          outputList.push(intersection());
+          outputList.push(polyP2); // Caso 1, salva apenas p2
+        } else if (
+          isInside(polyP1, [windowP1[0], windowP2[0], windowP1[1], windowP2[1]])
+        ) {
+          // Caso 2, salva apenas v2'
+          outputList.push(
+            intersection([
+              windowP1[0],
+              windowP1[1],
+              windowP2[0],
+              windowP2[1],
+              polyP1[1],
+              polyP1[0],
+              polyP2[1],
+              polyP2[0],
+            ])
+          );
         }
-        s = e;
+        polyP1 = polyP2;
       }
-      cp1 = cp2;
+      windowP1 = windowP2;
     }
     return outputList;
   }
@@ -113,9 +149,12 @@ const SutherlandHodgman = () => {
   // useEffect(() => {
   //   const context = canvas.current?.getContext("2d");
   //   if (context) {
-  //     const clippedPolygon = clip(Shapes.polygon4, Shapes.polygon4Window);
-  //     drawPolygon(context, Shapes.polygon4Window, "#888", "#88f");
-  //     drawPolygon(context, Shapes.polygon4, "#888", "#8f8");
+  //     const clippedPolygon = clip(
+  //       Shapes.defaultPolygon,
+  //       Shapes.defaultPolygonWindow
+  //     );
+  //     drawPolygon(context, Shapes.defaultPolygonWindow, "#888", "#88f");
+  //     drawPolygon(context, Shapes.defaultPolygon, "#888", "#8f8");
   //     drawPolygon(context, clippedPolygon, "#000", "#0ff");
   //   }
   // }, []);
