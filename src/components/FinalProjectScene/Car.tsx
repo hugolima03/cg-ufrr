@@ -14,6 +14,7 @@ import * as THREE from "three";
 
 type CarProps = {
   thirdPerson: boolean;
+  debug?: boolean;
 };
 
 useGLTF.preload("/models/fusca.glb");
@@ -63,9 +64,9 @@ type BeetleGLTF = GLTF & {
   nodes: Record<BeetleNode, Mesh>;
 };
 
-const Car = ({ thirdPerson }: CarProps) => {
+const Car = ({ thirdPerson, debug }: CarProps) => {
   const position: Triplet = [-1.5, 0.5, 3];
-  const width = 0.2;
+  const width = 0.24;
   const height = 0.07;
   const front = 0.12;
   const wheelRadius = 0.05;
@@ -127,108 +128,117 @@ const Car = ({ thirdPerson }: CarProps) => {
         position={[0, -0.6, 0]}
         scale={0.1}
       >
-        <mesh
-          castShadow
-          rotation-y={Math.PI}
-          material={materials["Black paint"]}
-          geometry={nodes.chassis_1.geometry}
-        />
-        <mesh
-          castShadow
-          rotation-y={Math.PI}
-          material={materials.Rubber}
-          geometry={nodes.chassis_2.geometry}
-        />
-        <mesh
-          castShadow
-          rotation-y={Math.PI}
-          material={materials.Paint}
-          geometry={nodes.chassis_3.geometry}
-        />
-        <mesh
-          castShadow
-          rotation-y={Math.PI}
-          material={materials.Underbody}
-          geometry={nodes.chassis_4.geometry}
-        />
-        <mesh
-          castShadow
-          rotation-y={Math.PI}
-          material={materials.Chrom}
-          geometry={nodes.chassis_5.geometry}
-        />
-        <mesh
-          castShadow
-          rotation-y={Math.PI}
-          material={materials["Interior (dark)"]}
-          geometry={nodes.chassis_6.geometry}
-        />
-        <mesh
-          castShadow
-          rotation-y={Math.PI}
-          material={materials["Interior (light)"]}
-          geometry={nodes.chassis_7.geometry}
-        />
-        <mesh
-          castShadow
-          rotation-y={Math.PI}
-          material={materials.Reflector}
-          geometry={nodes.chassis_8.geometry}
-        />
-        <mesh
-          rotation-y={Math.PI}
-          material={materials.Glass}
-          geometry={nodes.chassis_9.geometry}
-          material-transparent={false}
-          material-color="black"
-        />
-        <mesh
-          castShadow
-          rotation-y={Math.PI}
-          material={materials.Steel}
-          geometry={nodes.chassis_10.geometry}
-        />
-        <mesh
-          castShadow
-          rotation-y={Math.PI}
-          material={materials["Black plastic"]}
-          geometry={nodes.chassis_11.geometry}
-        />
-        <mesh
-          rotation-y={Math.PI}
-          material={materials.Headlight}
-          geometry={nodes.chassis_12.geometry}
-        />
-        <mesh
-          castShadow
-          rotation-y={Math.PI}
-          material={materials["Reverse lights"]}
-          geometry={nodes.chassis_13.geometry}
-        />
-        <mesh
-          castShadow
-          rotation-y={Math.PI}
-          material={materials["Orange plastic"]}
-          geometry={nodes.chassis_14.geometry}
-        />
-        <mesh
-          castShadow
-          rotation-y={Math.PI}
-          material={materials["Tail lights"]}
-          geometry={nodes.chassis_15.geometry}
-        />
-        <mesh
-          castShadow
-          rotation-y={Math.PI}
-          material={materials["License Plate"]}
-          geometry={nodes.chassis_16.geometry}
-        />
+        {debug ? (
+          <mesh>
+            <meshBasicMaterial transparent={true} opacity={0.3} />
+            <boxGeometry args={chassisBodyArgs as any} />
+          </mesh>
+        ) : (
+          <>
+            <mesh
+              castShadow
+              rotation-y={Math.PI}
+              material={materials["Black paint"]}
+              geometry={nodes.chassis_1.geometry}
+            />
+            <mesh
+              castShadow
+              rotation-y={Math.PI}
+              material={materials.Rubber}
+              geometry={nodes.chassis_2.geometry}
+            />
+            <mesh
+              castShadow
+              rotation-y={Math.PI}
+              material={materials.Paint}
+              geometry={nodes.chassis_3.geometry}
+            />
+            <mesh
+              castShadow
+              rotation-y={Math.PI}
+              material={materials.Underbody}
+              geometry={nodes.chassis_4.geometry}
+            />
+            <mesh
+              castShadow
+              rotation-y={Math.PI}
+              material={materials.Chrom}
+              geometry={nodes.chassis_5.geometry}
+            />
+            <mesh
+              castShadow
+              rotation-y={Math.PI}
+              material={materials["Interior (dark)"]}
+              geometry={nodes.chassis_6.geometry}
+            />
+            <mesh
+              castShadow
+              rotation-y={Math.PI}
+              material={materials["Interior (light)"]}
+              geometry={nodes.chassis_7.geometry}
+            />
+            <mesh
+              castShadow
+              rotation-y={Math.PI}
+              material={materials.Reflector}
+              geometry={nodes.chassis_8.geometry}
+            />
+            <mesh
+              rotation-y={Math.PI}
+              material={materials.Glass}
+              geometry={nodes.chassis_9.geometry}
+              material-transparent={false}
+              material-color="black"
+            />
+            <mesh
+              castShadow
+              rotation-y={Math.PI}
+              material={materials.Steel}
+              geometry={nodes.chassis_10.geometry}
+            />
+            <mesh
+              castShadow
+              rotation-y={Math.PI}
+              material={materials["Black plastic"]}
+              geometry={nodes.chassis_11.geometry}
+            />
+            <mesh
+              rotation-y={Math.PI}
+              material={materials.Headlight}
+              geometry={nodes.chassis_12.geometry}
+            />
+            <mesh
+              castShadow
+              rotation-y={Math.PI}
+              material={materials["Reverse lights"]}
+              geometry={nodes.chassis_13.geometry}
+            />
+            <mesh
+              castShadow
+              rotation-y={Math.PI}
+              material={materials["Orange plastic"]}
+              geometry={nodes.chassis_14.geometry}
+            />
+            <mesh
+              castShadow
+              rotation-y={Math.PI}
+              material={materials["Tail lights"]}
+              geometry={nodes.chassis_15.geometry}
+            />
+            <mesh
+              castShadow
+              rotation-y={Math.PI}
+              material={materials["License Plate"]}
+              geometry={nodes.chassis_16.geometry}
+            />
+          </>
+        )}
       </group>
 
-      <Wheel wheelRef={wheels[0]} radius={wheelRadius} leftSide />
-      <Wheel wheelRef={wheels[1]} radius={wheelRadius} />
-      <Wheel wheelRef={wheels[2]} radius={wheelRadius} leftSide />
-      <Wheel wheelRef={wheels[3]} radius={wheelRadius} />
+      <Wheel wheelRef={wheels[0]} radius={wheelRadius} leftSide debug={debug} />
+      <Wheel wheelRef={wheels[1]} radius={wheelRadius} debug={debug} />
+      <Wheel wheelRef={wheels[2]} radius={wheelRadius} leftSide debug={debug} />
+      <Wheel wheelRef={wheels[3]} radius={wheelRadius} debug={debug} />
     </group>
   );
 };

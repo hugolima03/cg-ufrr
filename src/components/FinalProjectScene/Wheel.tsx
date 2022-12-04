@@ -7,6 +7,7 @@ type WheelProps = {
   radius: number;
   wheelRef: any;
   leftSide?: boolean;
+  debug?: boolean;
 };
 
 type WheelGLTF = GLTF & {
@@ -14,7 +15,12 @@ type WheelGLTF = GLTF & {
   nodes: Record<"wheel_1" | "wheel_2" | "wheel_3", Mesh>;
 };
 
-export const Wheel = ({ radius, wheelRef, leftSide }: WheelProps) => {
+export const Wheel = ({
+  radius,
+  wheelRef,
+  leftSide,
+  debug = false,
+}: WheelProps) => {
   const {
     materials: { Chrom, Rubber, Steel },
     nodes,
@@ -22,11 +28,21 @@ export const Wheel = ({ radius, wheelRef, leftSide }: WheelProps) => {
 
   return (
     <group ref={wheelRef}>
-      <group rotation={[0, 0, ((leftSide ? 1 : -1) * Math.PI) / 2]} scale={0.2}>
-        <mesh material={Rubber} geometry={nodes.wheel_1.geometry} />
-        <mesh material={Steel} geometry={nodes.wheel_2.geometry} />
-        <mesh material={Chrom} geometry={nodes.wheel_3.geometry} />
-      </group>
+      {debug ? (
+        <mesh rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[radius, radius, 0.015, 16]} />
+          <meshNormalMaterial transparent={true} opacity={0.25} />
+        </mesh>
+      ) : (
+        <group
+          rotation={[0, 0, ((leftSide ? 1 : -1) * Math.PI) / 2]}
+          scale={0.2}
+        >
+          <mesh material={Rubber} geometry={nodes.wheel_1.geometry} />
+          <mesh material={Steel} geometry={nodes.wheel_2.geometry} />
+          <mesh material={Chrom} geometry={nodes.wheel_3.geometry} />
+        </group>
+      )}
     </group>
   );
 };

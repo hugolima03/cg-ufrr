@@ -10,7 +10,11 @@ import Track from "./Track";
 import Ground from "./Ground";
 import Car from "./Car";
 
-const FinalProjectScene = () => {
+type FinalProjectSceneProps = {
+  debug: boolean;
+};
+
+const FinalProjectScene = ({ debug }: FinalProjectSceneProps) => {
   const [thirdPerson, setThirdPerson] = useState(false);
   const [cameraPosition, setCameraPosition] = useState([-6, 3.9, 6.21]);
 
@@ -35,8 +39,8 @@ const FinalProjectScene = () => {
       {!thirdPerson && <OrbitControls target={[-2.64, -0.71, 0.03]} />}
 
       <Ground />
-      <Track />
-      <Car thirdPerson={thirdPerson} />
+      <Track debug={debug} />
+      <Car thirdPerson={thirdPerson} debug={debug} />
     </Suspense>
   );
 };

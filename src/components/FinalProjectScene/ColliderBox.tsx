@@ -1,8 +1,6 @@
 import { useBox } from "@react-three/cannon";
 
-const debug = false;
-
-const ColliderBox = ({ position, scale }: any) => {
+const ColliderBox = ({ position, scale, debug = false }: any) => {
   useBox(() => ({
     args: scale,
     position,
