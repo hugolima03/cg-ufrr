@@ -27,6 +27,7 @@ const BezierCurves = () => {
   ]);
 
   const [lines, setLines] = useState<React.ReactNode[]>([]);
+  const [points, setPoints] = useState<Pixel[]>([]);
 
   function drawLine(p1: Pixel, p2: Pixel, stroke = 2, color = "#000000") {
     const newLine = (
@@ -43,12 +44,13 @@ const BezierCurves = () => {
     setLines((lines) => [...lines, newLine]);
   }
 
-  function drawCurveFromPoints(points: Pixel[]) {
-    for (let i = 0; i < points.length; i++) {
-      if (i + 1 < points.length) {
-        drawLine(points[i], points[i + 1]);
-      }
-    }
+  function renderPoints(points: Pixel[]) {
+    setPoints(
+      points.map(({ x, y }) => ({
+        x,
+        y: PLOT_HEIGHT - y,
+      }))
+    );
   }
 
   function calculateNewPoint(t: number) {
@@ -145,7 +147,9 @@ const BezierCurves = () => {
       drawingPoints = [];
       calculateDrawingPoints(Number(data.numDrawingPoints));
       drawHandles(); // Desenhar linhas dos pontos de controle
-      drawCurveFromPoints(drawingPoints);
+      setPoints(drawingPoints);
+      // drawCurveFromPoints(drawingPoints);
+      renderPoints(drawingPoints);
       console.timeEnd("parametric");
     }
 
@@ -164,8 +168,10 @@ const BezierCurves = () => {
         points.push(deCasteljauAlgorithm(temp, t));
         t += interval;
       }
+      setPoints(points);
       drawHandles(); // Desenhar linhas dos pontos de controle
-      drawCurveFromPoints(points);
+      renderPoints(points);
+      // drawCurveFromPoints(points);
       console.timeEnd("casteljau");
     }
   }
@@ -246,6 +252,9 @@ const BezierCurves = () => {
           style={{ overflow: "visible" }}
         >
           {lines.map((line) => line)}
+          {points.map(({ x, y }) => (
+            <circle key={x + y} cx={x} cy={PLOT_HEIGHT - y} r="3" fill="#000" />
+          ))}
           {debugPoints.map(({ x, y }) => (
             <circle key={x + y} cx={x} cy={PLOT_HEIGHT - y} r="5" fill="#000" />
           ))}
