@@ -35,6 +35,10 @@ const SutherlandHodgman = () => {
   }
 
   function isInside(ponto: number[], [x1, x2, y1, y2]: number[]) {
+    // ponto -> ponto a ser verificado
+    // ponto[0] = X
+    // ponto[1] = Y
+    // x1, x2, y1, y2 -> pontos que compõem a Window
     return (x2 - x1) * (ponto[1] - y1) > (y2 - y1) * (ponto[0] - x1);
   }
 
@@ -145,19 +149,6 @@ const SutherlandHodgman = () => {
       showExternalPoints,
     });
   }
-
-  // useEffect(() => {
-  //   const context = canvas.current?.getContext("2d");
-  //   if (context) {
-  //     const clippedPolygon = clip(
-  //       Shapes.defaultPolygon,
-  //       Shapes.defaultPolygonWindow
-  //     );
-  //     drawPolygon(context, Shapes.defaultPolygonWindow, "#888", "#88f");
-  //     drawPolygon(context, Shapes.defaultPolygon, "#888", "#8f8");
-  //     drawPolygon(context, clippedPolygon, "#000", "#0ff");
-  //   }
-  // }, []);
 
   return (
     <S.Wrapper>

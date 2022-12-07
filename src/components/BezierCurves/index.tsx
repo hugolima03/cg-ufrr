@@ -6,8 +6,6 @@ import { useForm } from "react-hook-form";
 
 import { Column, Wrapper } from "templates/Base/styles";
 
-import { deCasteljauAlgorithm } from "functions/bezierCurves/casteljau";
-
 const PLOT_HEIGHT = 500;
 
 type Inputs = {
@@ -138,6 +136,53 @@ const BezierCurves = () => {
     });
   }
 
+  function casteljauRecursive(points: Pixel[], deep: number) {
+    if (deep === 0) return;
+    var m = [
+      // ponto medio 0
+      {
+        x: (points[0].x + points[1].x) / 2,
+        y: (points[0].y + points[1].y) / 2,
+      },
+
+      // ponto medio 1
+      {
+        x: (points[1].x + points[2].x) / 2,
+        y: (points[1].y + points[2].y) / 2,
+      },
+
+      // ponto medio 2
+      {
+        x: (points[2].x + points[3].x) / 2,
+        y: (points[2].y + points[3].y) / 2,
+      },
+    ];
+
+    // ponto medio 3
+    m.push({
+      x: (m[0].x + m[1].x) / 2,
+      y: (m[0].y + m[1].y) / 2,
+    });
+
+    // ponto medio 4
+    m.push({
+      x: (m[1].x + m[2].x) / 2,
+      y: (m[1].y + m[2].y) / 2,
+    });
+
+    // ponto medio 5
+    m.push({
+      x: (m[3].x + m[4].x) / 2,
+      y: (m[3].y + m[4].y) / 2,
+    });
+
+    //Pinta o pixel
+    setPoints((points) => [...points, { x: m[5].x, y: m[5].y }]);
+    //Chama recursivamente para cada metade da curva
+    casteljauRecursive([points[0], m[0], m[3], m[5]], deep - 1);
+    casteljauRecursive([m[5], m[4], m[2], points[3]], deep - 1);
+  }
+
   function onSubmit(data: Inputs) {
     if (data.algorithm === "parametric") {
       console.time("parametric");
@@ -155,22 +200,13 @@ const BezierCurves = () => {
 
     if (data.algorithm === "casteljau") {
       console.time("casteljau");
+      setPoints([]);
       setLines([]);
       setDebugPoints([]);
-      const points = [];
 
-      const temp = controlPoints.map(({ x, y }) => ({ x, y: PLOT_HEIGHT - y }));
-      const interval = 1 / data.numDrawingPoints;
-      let t = interval;
+      casteljauRecursive(controlPoints, data.numDrawingPoints);
 
-      points.push(deCasteljauAlgorithm(temp, 0));
-      for (let i = 0; i < data.numDrawingPoints; i++) {
-        points.push(deCasteljauAlgorithm(temp, t));
-        t += interval;
-      }
-      setPoints(points);
       drawHandles(); // Desenhar linhas dos pontos de controle
-      renderPoints(points);
       // drawCurveFromPoints(points);
       console.timeEnd("casteljau");
     }
@@ -221,24 +257,40 @@ const BezierCurves = () => {
               </Span>
             ))}
 
-            <label>numDrawingPoints: {watch("numDrawingPoints")}</label>
+            {watch("algorithm") === "parametric" && (
+              <>
+                {" "}
+                <label>numDrawingPoints: {watch("numDrawingPoints")}</label>
+                <input
+                  type="range"
+                  min={1}
+                  max={101}
+                  step={5}
+                  {...register("numDrawingPoints")}
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setControlPoints((points) => [...points, { x: 0, y: 0 }])
+                  }
+                >
+                  Adicionar ponto de controle
+                </button>
+              </>
+            )}
 
-            <input
-              type="range"
-              min={1}
-              max={101}
-              step={5}
-              {...register("numDrawingPoints")}
-            />
-
-            <button
-              type="button"
-              onClick={() =>
-                setControlPoints((points) => [...points, { x: 0, y: 0 }])
-              }
-            >
-              Adicionar ponto de controle
-            </button>
+            {watch("algorithm") === "casteljau" && (
+              <>
+                <label>numDrawingPoints: {watch("numDrawingPoints")}</label>
+                <input
+                  type="range"
+                  min={1}
+                  max={13}
+                  step={2}
+                  {...register("numDrawingPoints")}
+                />
+              </>
+            )}
           </>
 
           <input type="submit" onClick={handleSubmit(onSubmit)} />
