@@ -22,6 +22,25 @@ const SutherlandHodgman = () => {
   const canvas = useRef<HTMLCanvasElement>(null);
   const canvasHeight = 500;
 
+  function drawPolygon(
+    context: CanvasRenderingContext2D,
+    polygon: number[][],
+    strokeStyle: string,
+    fillStyle: string
+  ) {
+    context.strokeStyle = strokeStyle;
+    context.fillStyle = fillStyle;
+    context.beginPath();
+    context.moveTo(polygon[0][0], canvasHeight - polygon[0][1]); //first vertex
+    for (var i = 1; i < polygon.length; i++) {
+      context.lineTo(polygon[i][0], canvasHeight - polygon[i][1]);
+    }
+    context.lineTo(polygon[0][0], canvasHeight - polygon[0][1]); //back to start
+    context.fill();
+    context.stroke();
+    context.closePath();
+  }
+
   function intersection([x1, y1, x2, y2, x3, y3, x4, y4]: number[]) {
     var dc = [x1 - x2, y1 - y2],
       dp = [y3 - y4, x3 - x4],
@@ -38,7 +57,7 @@ const SutherlandHodgman = () => {
     return (x2 - x1) * (ponto[1] - y1) > (y2 - y1) * (ponto[0] - x1);
   }
 
-  function clip(polygon: number[][], polygonWindow: number[][]) {
+  function sutherlandHodgman(polygon: number[][], polygonWindow: number[][]) {
     let windowP1: any, windowP2: any, polyP1: any, polyP2: any;
     var outputList = polygon;
 
@@ -48,7 +67,7 @@ const SutherlandHodgman = () => {
       windowP2 = polygonWindow[j];
       var inputList = outputList;
       outputList = [];
-      polyP1 = inputList[inputList.length - 1]; //last on the input list
+      polyP1 = inputList[inputList.length - 1];
 
       for (var i in inputList) {
         polyP2 = inputList[i];
@@ -101,33 +120,17 @@ const SutherlandHodgman = () => {
     return outputList;
   }
 
-  function drawPolygon(
-    context: CanvasRenderingContext2D,
-    polygon: number[][],
-    strokeStyle: string,
-    fillStyle: string
-  ) {
-    context.strokeStyle = strokeStyle;
-    context.fillStyle = fillStyle;
-    context.beginPath();
-    context.moveTo(polygon[0][0], canvasHeight - polygon[0][1]); //first vertex
-    for (var i = 1; i < polygon.length; i++) {
-      context.lineTo(polygon[i][0], canvasHeight - polygon[i][1]);
+  function onSubmit({ shape, showExternalPoints }: Inputs) {
+    if (canvas.current) {
+      canvas.current.width = canvas.current?.width;
     }
-    context.lineTo(polygon[0][0], canvasHeight - polygon[0][1]); //back to start
-    context.fill();
-    context.stroke();
-    context.closePath();
-  }
 
-  function suthHodgClip(
-    polygon: number[][],
-    polygonWindow: number[][],
-    { showExternalPoints }: SuthHodgClipOptions
-  ) {
+    const polygon = Shapes[shape];
+    const polygonWindow = Shapes[`${shape}Window`];
+
     const context = canvas.current?.getContext("2d");
     if (context) {
-      var clippedPolygon = clip(polygon, polygonWindow);
+      var clippedPolygon = sutherlandHodgman(polygon, polygonWindow);
       drawPolygon(context, polygonWindow, "#888", "#88f");
       if (showExternalPoints) {
         drawPolygon(context, polygon, "#888", "#8f8");
@@ -135,29 +138,6 @@ const SutherlandHodgman = () => {
       drawPolygon(context, clippedPolygon, "#000", "#0ff");
     }
   }
-
-  function onSubmit({ shape, showExternalPoints }: Inputs) {
-    if (canvas.current) {
-      canvas.current.width = canvas.current?.width;
-    }
-
-    suthHodgClip(Shapes[shape], Shapes[`${shape}Window`], {
-      showExternalPoints,
-    });
-  }
-
-  // useEffect(() => {
-  //   const context = canvas.current?.getContext("2d");
-  //   if (context) {
-  //     const clippedPolygon = clip(
-  //       Shapes.defaultPolygon,
-  //       Shapes.defaultPolygonWindow
-  //     );
-  //     drawPolygon(context, Shapes.defaultPolygonWindow, "#888", "#88f");
-  //     drawPolygon(context, Shapes.defaultPolygon, "#888", "#8f8");
-  //     drawPolygon(context, clippedPolygon, "#000", "#0ff");
-  //   }
-  // }, []);
 
   return (
     <S.Wrapper>
