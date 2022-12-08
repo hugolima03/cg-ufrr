@@ -54,6 +54,10 @@ const SutherlandHodgman = () => {
   }
 
   function isInside(ponto: number[], [x1, x2, y1, y2]: number[]) {
+    // ponto -> ponto a ser verificado
+    // ponto[0] = X
+    // ponto[1] = Y
+    // x1, x2, y1, y2 -> pontos que compõem a Window
     return (x2 - x1) * (ponto[1] - y1) > (y2 - y1) * (ponto[0] - x1);
   }
 
