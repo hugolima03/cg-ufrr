@@ -55,72 +55,65 @@ const SutherlandHodgman = () => {
 
   function isInside(ponto: number[], [x1, x2, y1, y2]: number[]) {
     // ponto -> ponto a ser verificado
-    // ponto[0] = X
-    // ponto[1] = Y
     // x1, x2, y1, y2 -> pontos que compõem a Window
-    return (x2 - x1) * (ponto[1] - y1) > (y2 - y1) * (ponto[0] - x1);
+
+    // CROSS PRODUCT
+    // Os vértices do polígono de recorte devem estar listados no sentido horário, desta forma, estar fora significa estar à esquerda da linha
+    // P < 0 , ponto está a esquerda da linha
+    // P === 0, ponto está na linha
+    // P > 0, ponto está a direita
+    const P = (x2 - x1) * (ponto[1] - y1) - (y2 - y1) * (ponto[0] - x1);
+    return P > 0 || P === 0;
   }
 
-  function sutherlandHodgman(polygon: number[][], polygonWindow: number[][]) {
-    let windowP1: any, windowP2: any, polyP1: any, polyP2: any;
-    var outputList = polygon;
+  function sutherlandHodgman(
+    subjectPolygon: number[][],
+    clipPolygon: number[][]
+  ) {
+    let outputList = subjectPolygon; // Lista final começa com os mesmos pontos do subjectPolygon
+    let windowP1 = clipPolygon[clipPolygon.length - 1]; // Começa com o último ponto do clipPolygon
 
-    windowP1 = polygonWindow[polygonWindow.length - 1];
+    for (let j in clipPolygon) {
+      // Iterando os vértices da window
+      let inputList = outputList;
+      outputList = []; // Limpando array de output
 
-    for (var j in polygonWindow) {
-      windowP2 = polygonWindow[j];
-      var inputList = outputList;
-      outputList = [];
-      polyP1 = inputList[inputList.length - 1];
+      let windowP2 = clipPolygon[j];
+      let prevPoint = inputList[inputList.length - 1];
 
-      for (var i in inputList) {
-        polyP2 = inputList[i];
-        if (
-          isInside(polyP2, [windowP1[0], windowP2[0], windowP1[1], windowP2[1]])
-        ) {
-          if (
-            !isInside(polyP1, [
-              windowP1[0],
-              windowP2[0],
-              windowP1[1],
-              windowP2[1],
-            ])
-          ) {
-            outputList.push(
-              intersection([
-                windowP1[0],
-                windowP1[1],
-                windowP2[0],
-                windowP2[1],
-                polyP1[1],
-                polyP1[0],
-                polyP2[1],
-                polyP2[0],
-              ])
-            ); // Caso 4, salva p1' e p2
+      // clipEdge é a borda da Window analisada
+      const clipEdge = [windowP1[0], windowP2[0], windowP1[1], windowP2[1]];
+
+      for (let i in inputList) {
+        // Iterando cada item da inputList
+        let currentPoint = inputList[i];
+        const intersectionPoint = intersection([
+          windowP1[0],
+          windowP1[1],
+          windowP2[0],
+          windowP2[1],
+          prevPoint[1],
+          prevPoint[0],
+          currentPoint[1],
+          currentPoint[0],
+        ]); // Ponto de interseção entre currentPoint, prevPoint e a window
+
+        if (isInside(currentPoint, clipEdge)) {
+          if (!isInside(prevPoint, clipEdge)) {
+            outputList.push(intersectionPoint); // Caso 4, salva p1' e p2
           }
-          outputList.push(polyP2); // Caso 1, salva apenas p2
-        } else if (
-          isInside(polyP1, [windowP1[0], windowP2[0], windowP1[1], windowP2[1]])
-        ) {
+          outputList.push(currentPoint); // Caso 1, salva apenas p2
+        } else if (isInside(prevPoint, clipEdge)) {
           // Caso 2, salva apenas v2'
-          outputList.push(
-            intersection([
-              windowP1[0],
-              windowP1[1],
-              windowP2[0],
-              windowP2[1],
-              polyP1[1],
-              polyP1[0],
-              polyP2[1],
-              polyP2[0],
-            ])
-          );
-        }
-        polyP1 = polyP2;
+          outputList.push(intersectionPoint);
+        } // else {
+        // Salva nada
+        //}
+        prevPoint = currentPoint; // Atualizando o prevPoint para a próxima iteração
       }
-      windowP1 = windowP2;
+      windowP1 = windowP2; // Atualizando para a próxima iteração
     }
+
     return outputList;
   }
 
