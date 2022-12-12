@@ -251,9 +251,14 @@ const BezierCurves = () => {
                   }
                   step={100}
                 />
-                <button type="button" onClick={() => removeControlPoint(index)}>
-                  Remover
-                </button>
+                {watch("algorithm") === "parametric" && (
+                  <button
+                    type="button"
+                    onClick={() => removeControlPoint(index)}
+                  >
+                    Remover
+                  </button>
+                )}
               </Span>
             ))}
 
