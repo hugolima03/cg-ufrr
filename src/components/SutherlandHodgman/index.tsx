@@ -54,16 +54,17 @@ const SutherlandHodgman = () => {
   }
 
   function isInside(ponto: number[], [x1, x2, y1, y2]: number[]) {
-    // ponto -> ponto a ser verificado
-    // x1, x2, y1, y2 -> pontos que compõem a Window
+    // ponto -> ponto a ser verificado - vetor unitário
+    // x1, x2, y1, y2 -> pontos que compõem a reta de recorte
 
-    // CROSS PRODUCT
-    // Os vértices do polígono de recorte devem estar listados no sentido horário, desta forma, estar fora significa estar à esquerda da linha
+    // Se os vértices do polígono de recorte estiverem consistentemente listados no sentido anti-horário, isso equivale a testar se o ponto está à esquerda da linha (esquerda significa dentro, enquanto direita significa fora) e pode ser implementado simplesmente usando um produto vetorial.
+
+    // P = (x - x1)(y2 - y1)-(y - y1)(x2 - x1)
     // P < 0 , ponto está a esquerda da linha
     // P === 0, ponto está na linha
     // P > 0, ponto está a direita
-    const P = (x2 - x1) * (ponto[1] - y1) - (y2 - y1) * (ponto[0] - x1);
-    return P > 0 || P === 0;
+    const P = (ponto[0] - x1) * (y2 - y1) - (ponto[1] - y1) * (x2 - x1);
+    return P < 0 || P === 0;
   }
 
   function sutherlandHodgman(
