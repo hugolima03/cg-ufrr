@@ -7,6 +7,8 @@ type Controls = {
   s: boolean;
   d: boolean;
   r: boolean;
+  l: boolean;
+  q: boolean;
   arrowdown: boolean;
   arrowup: boolean;
   arrowleft: boolean;
@@ -23,6 +25,8 @@ const useControls = (
     s: false,
     d: false,
     r: false,
+    l: false,
+    q: false,
     arrowdown: false,
     arrowup: false,
     arrowleft: false,
@@ -93,6 +97,14 @@ const useControls = (
       chassisApi.velocity.set(0, 0, 0);
       chassisApi.angularVelocity.set(0, 0, 0);
       chassisApi.rotation.set(0, 0, 0);
+    }
+
+    if (controls.q) {
+      chassisApi.applyLocalImpulse([0, 55, 0], [0, 0, 0]);
+    }
+    if (controls.l) {
+      chassisApi.velocity.set(0, 0, 0);
+      chassisApi.angularVelocity.set(0, 0, 0);
     }
   }, [controls, vehicleApi, chassisApi]);
 
