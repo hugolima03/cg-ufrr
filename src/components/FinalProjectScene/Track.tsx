@@ -11,7 +11,7 @@ type TrackProps = {
 
 const Track = ({ debug }: TrackProps) => {
   const result = useLoader(GLTFLoader, "/models/track.glb");
-  const colorMap = useLoader(TextureLoader, "/textures/track.png");
+  const colorMap = useLoader(TextureLoader, "/textures/track2.png");
   useEffect(() => {
     colorMap.anisotropy = 16;
   }, [colorMap]);
